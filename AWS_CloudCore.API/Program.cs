@@ -1,12 +1,17 @@
 using Amazon.Runtime;
+using Amazon.SimpleNotificationService;
 using AWS_CloudCore.Core.Models.Configs;
+using AWS_CloudCore.Core.Services.Interfaces;
+using AWS_CloudCore.Infra.Services.Implementation;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<ISecretsMangerService, SecretsMangerService>();
+builder.Services.AddScoped<IMessageQueueService, SnsMessageSenderService>();
+builder.Services.AddAWSService<IAmazonSimpleNotificationService>();
 
 
 string secretsManagerEnvironmentKey = $"{builder.Environment.EnvironmentName}_{builder.Environment.ApplicationName}_";

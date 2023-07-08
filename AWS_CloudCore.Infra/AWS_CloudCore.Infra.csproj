@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.102.64" />
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.7.101.88" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AWS_CloudCore.Core\AWS_CloudCore.Core.csproj" />
   </ItemGroup>
 

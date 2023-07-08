@@ -1,11 +1,7 @@
-﻿using Amazon.SecretsManager.Model;
-using Amazon.SecretsManager;
-using AWS_CloudCore.Core.Models.Configs;
-using Microsoft.AspNetCore.Http;
+﻿using AWS_CloudCore.Core.Models.Configs;
+using AWS_CloudCore.Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Amazon;
-using System.Net;
 
 namespace AWS_CloudCore.API.Controllers
 {
@@ -13,39 +9,28 @@ namespace AWS_CloudCore.API.Controllers
     [ApiController]
     public class SecretsManagerController : ControllerBase
     {
-        public SecretsManagerController(IOptionsSnapshot<SNSConfig> options)
+        private readonly ISecretsMangerService _secretsMangerService;
+
+        public SecretsManagerController(IOptionsSnapshot<SNSConfig> options, ISecretsMangerService secretsMangerService)
         {
+            _secretsMangerService = secretsMangerService;
             // secret name format: {env}_ProjectName_Key 
             //eg:  Production_AWS_CloudCore.API_SNSConfig__Endpoint
         }
 
-        // change to accept a model and move code to a class 
-        [HttpGet]
-        public async Task<string> Get()
+        [HttpGet("GetSecret")]
+        public async Task<string> GetSecret()
         {
             string secretName = "Production_AWS_CloudCore.API_SNSConfig__Endpoint";
             string region = "eu-north-1";
+            string secretVersion = "AWSCURRENT";
 
-            IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
-
-            GetSecretValueRequest request = new GetSecretValueRequest
+            return await _secretsMangerService.GetSecret(new Core.Models.SecretRequestDto
             {
-                SecretId = secretName,
-                VersionStage = "AWSCURRENT", // VersionStage defaults to AWSCURRENT if unspecified.
-            };
-
-            GetSecretValueResponse response;
-
-            try
-            {
-                response = await client.GetSecretValueAsync(request);
-                return response.SecretString;
-            }
-            catch (Exception e)
-            {
-                return e.Message;
-            }
-
+                Region = region,
+                SecretName = secretName,
+                Version = secretVersion
+            });
         }
     }
 }

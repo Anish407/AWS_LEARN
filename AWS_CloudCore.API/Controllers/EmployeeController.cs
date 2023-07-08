@@ -1,10 +1,6 @@
-﻿using Amazon.SecretsManager.Model;
-using Amazon.SecretsManager;
-using AWS_CloudCore.Core.Models.Configs;
-using Microsoft.AspNetCore.Http;
+﻿using AWS_CloudCore.Core.Models.Configs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Amazon;
 
 namespace AWS_CloudCore.API.Controllers
 {
